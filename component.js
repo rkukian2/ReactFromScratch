@@ -17,7 +17,45 @@ class Component {
         if (typeof this.props !== 'object') {
             throw new TypeError('Props should be object');
         }
+
+        this.componentWillMount();
     }
+    //add lifecycle methods to allow devs to interact with a component in specific points in its lifecycle
+    componentWillMount() {
+        //Lifecycle method: Called before the component is mounted
+        //last chance to modify component's state before rendering
+    }
+
+    componentDidMount() {
+        //Lifecycle method: Called after the component is mounted
+        //used to update component state
+    }
+
+    componentWillReceiveProps(nextProps) {
+        //Lifecycle method: Called when the component is about to receive new props
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        //Lifecycle method: Called before rendering when new props or state are received
+        //Override this method to return false if you don't want the component to update
+        return true;
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        //Lifecycle method: Called before rendering when new props or state are received
+        //similar to componentWillMount but runs before every re-render not just the initial one
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        //Lifecycle method: Called after the component has updated
+        //ideal for tasks that depend on the component's DOM being updated
+    }
+
+    componentWillUnmount() {
+        //Lifecycle method: Called just before the component is unmounted and destroyed
+        //used for cleanup
+    }
+
 
     // 2/2 public API
     setState(partialState) {
