@@ -8,11 +8,22 @@ class Component {
         this._renderedComponent = null;
         this._renderedNode = null;
 
-        assert(typeof this.render === 'function');
+        //assert(typeof this.render === 'function');
+        if (typeof this.render !== 'function') {
+            throw new Error('Subclasses must implement render method also');
+        }
+
+        //ensure props are object
+        if (typeof this.props !== 'object') {
+            throw new TypeError('Props should be object');
+        }
     }
 
     // 2/2 public API
     setState(partialState) {
+        if (typeof partialState !== 'object' && typeof partialState !== 'function') {
+            throw new TypeError('setState expects object or function.');
+        }
         //simplified version
         //this is very batching starts to take place
         //React creates a queue of partial states and then calls setState
@@ -26,6 +37,9 @@ class Component {
 
     //helper for constructor to ensure we store the correct element
     _construct(element) {
+        if (!element) {
+            throw new Error('Need element to construct');
+        }
         this._currentElement = element;
     }
 
@@ -48,10 +62,18 @@ class Component {
     }
 
     recieiveComponent(nextElement) {
-        this.updateComponent(nextElement)
+        try {
+            this.updateComponent(nextElement);
+        } catch (error) {
+            console.error('Error during receiving component:', error);
+            throw error;
+        }
     }
 
     updateComponent(nextElement) {
+        if (!nextElement) {
+            throw new Error('updateComponent requires nextElement.');
+        }
         let prevElement = this._currentElement;
 
         //When state updating nextElement will be the same as the previously rendered element
